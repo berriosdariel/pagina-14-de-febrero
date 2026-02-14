@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para ti ❤️</title>
+  <meta name="description" content="Página romántica de San Valentín" />
+
+  <style>
+    :root{
+      --bg1:#120016;
+      --bg2:#2a001f;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --pink:#ff4d9d;
+      --rose:#ff79c6;
+      --gold:#ffd37a;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(255,77,157,.25), transparent 60%),
+        radial-gradient(900px 500px at 80% 15%, rgba(255,211,122,.18), transparent 60%),
+        radial-gradient(1200px 700px at 50% 100%, rgba(255,121,198,.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .container{width:min(1050px, 92vw); margin:0 auto}
+    a{color:inherit}
+
+    /* Fondo de corazones */
+    .floatLayer{
+      position: fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .heart{
+      position:absolute;
+      font-size: 18px;
+      opacity:.75;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.35));
+      animation: rise linear forwards;
+    }
+    @keyframes rise{
+      from{ transform: translateY(110vh) translateX(0) rotate(0deg); opacity:0 }
+      10%{ opacity:.85 }
+      to{ transform: translateY(-20vh) translateX(var(--drift)) rotate(360deg); opacity:0 }
+    }
+
+    header{
+      position: sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(12px);
+      background: rgba(10,0,16,.55);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .brand .dot{
+      width:36px;height:36px;border-radius:14px;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      box-shadow: var(--shadow);
+    }
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight:800;
+      color: #120016;
+      background: linear-gradient(135deg, var(--gold), var(--rose));
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+      transition: transform .08s ease;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btnGhost{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+    }
+
+    main{position:relative; z-index:1}
+    .hero{
+      padding: 46px 0 20px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .heroTitle{
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4.5vw, 46px);
+      line-height:1.05;
+      letter-spacing:.2px;
+    }
+    .heroTitle .glow{
+      background: linear-gradient(135deg, var(--gold), var(--pink));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+      text-shadow: 0 0 24px rgba(255,77,157,.20);
+    }
+    .subtitle{margin:0 0 14px; color: var(--muted); font-size: 15px}
+    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px}
+    .chip{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .miniNote{
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .rightCol{display:grid; gap:14px}
+    .statRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .stat{
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .stat .big{font-size: 26px; font-weight: 950}
+    .stat .small{color: var(--muted); font-size: 13px}
+
+    .section{padding: 16px 0}
+    .sectionTitle{margin: 0 0 10px; font-size: 18px}
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .note{
+      padding: 14px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .note h3{margin:0 0 8px}
+    .note p{margin:0; color: var(--muted)}
+    .quote{
+      font-size: 15px;
+      color: rgba(255,255,255,.86);
+      margin: 0;
+    }
+
+    /* Carta modal */
+    .overlay{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index:80;
+    }
+    .overlay.open{display:flex}
+    .modal{
+      width:min(720px, 96vw);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(18,0,22,.92);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .modalHeader{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
+    }
+    .modalHeader h2{margin:0; font-size: 18px}
+    .close{
+      border:none; cursor:pointer;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+    }
+    .letter{
+      line-height: 1.7;
+      color: rgba(255,255,255,.86);
+      white-space: pre-wrap;
+      margin:0;
+    }
+
+    /* Juego */
+    .gameWrap{
+      display:grid;
+      grid-template-columns: 1fr .9fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    .gameArea{
+      position:relative;
+      height: 320px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(700px 260px at 50% 20%, rgba(255,77,157,.20), transparent 70%),
+        rgba(255,255,255,.05);
+      overflow:hidden;
+      user-select:none;
+    }
+    .target{
+      position:absolute;
+      font-size: 26px;
+      transform: translate(-50%, -50%);
+      cursor:pointer;
+      transition: transform .06s ease;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.35));
+    }
+    .target:active{transform: translate(-50%, -50%) scale(.95)}
+    .gameSide .hint{margin:0; color:var(--muted); font-size:13px}
+    .bar{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    }
+    .pillBtn{
+      border:none; cursor:pointer;
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      color: #120016;
+      background: linear-gradient(135deg, var(--gold), var(--pink));
+    }
+    .pillBtn.secondary{
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    /* Audio visible */
+    .audioBox{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
+
+    audio{
+      width: 100%;
+      border-radius: 14px;
+      outline:none;
+    }
+
+    footer{
+      padding: 26px 0 40px;
+      color: var(--muted);
+      border-top:1px solid rgba(255,255,255,.10);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns: 1fr}
+      .grid3{grid-template-columns: 1fr}
+      .gameWrap{grid-template-columns: 1fr}
+      .statRow{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="floatLayer" id="floatLayer" aria-hidden="true"></div>
+
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <div class="dot"></div>
+          <div>14 de Febrero • Para <span id="herName">Ary</span> ❤️</div>
+        </div>
+        <div class="actions">
+          <button class="btn btnGhost" id="btnCarta">💌 Abrir carta</button>
+          <button class="btn" id="btnMusica">🎵 Música: OFF</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card">
+        <h1 class="heroTitle">
+          <span class="glow">Feliz San Valentín</span>, mi amor
+        </h1>
+        <p class="subtitle">
+          Hice esta página solo para ti, para que cada clic sea un “te amo” disfrazado.
+          Hoy (y siempre) eres mi lugar favorito.
+        </p>
+
+        <div class="chips">
+          <span class="chip">✨ Hecha con cariño</span>
+          <span class="chip">🌙 Para leer de noche</span>
+          <span class="chip">💗 Para sonreír</span>
+          <span class="chip">🎮 Con mini-juego</span>
+        </div>
+
+        <div class="miniNote" id="miniNote">
+          Tip: toca “Abrir carta” para una sorpresa 💌
+        </div>
+
+        <div class="audioBox">
+          <p class="subtitle" style="margin:0 0 10px;">
+            🎶 Música de fondo (si no suena, dale Play aquí o presiona el botón de arriba)
+          </p>
+          <audio id="audio" controls preload="auto">
+            <source src="song.mp3" type="audio/mpeg">
+            Tu navegador no soporta audio.
+          </audio>
+          <p class="subtitle" id="audioStatus" style="margin:10px 0 0;"></p>
+        </div>
+      </div>
+
+      <div class="rightCol">
+        <div class="card">
+          <h2 class="sectionTitle" style="margin:0 0 10px;">Nuestro contador de amor</h2>
+          <div class="statRow">
+            <div class="stat">
+              <div class="big" id="daysTo">—</div>
+              <div class="small">días para el 14 (si lo abres antes)</div>
+            </div>
+            <div class="stat">
+              <div class="big" id="heartCount">0</div>
+              <div class="small">corazones atrapados (juego)</div>
+            </div>
+          </div>
+          <p class="subtitle" style="margin-top:10px;">
+            Mini-promesa: cada corazón que atrapes cuenta como un “te elijo” 💞
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 class="sectionTitle" style="margin:0 0 10px;">Razones (modo infinito)</h2>
+          <p class="quote" id="reasonText">—</p>
+          <div class="bar">
+            <button class="pillBtn secondary" id="btnOtra">Otra razón ✨</button>
+            <button class="pillBtn secondary" id="btnCopiar">Copiar 💬</button>
+          </div>
+          <p class="hint" id="copyMsg" style="margin-top:8px;"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="sectionTitle">Pequeños “recuerdos”</h2>
+      <div class="grid3">
+        <div class="note">
+          <h3>📍 Nuestro lugar</h3>
+          <p>“La cafeteria que encontramos juntos"</p>
+        </div>
+        <div class="note">
+          <h3>🗓️ Nuestra fecha</h3>
+          <p>“Desde el día que te pedí que fueras mi novia, todo cambió, un 24 de Junio del 2022”.</p>
+        </div>
+        <div class="note">
+          <h3>🎁 Un detalle</h3>
+          <p>“Te debo un beso, porque te lo mereces por preciosa”.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="sectionTitle">Mini-juego: Atrapa los corazones 💘</h2>
+      <div class="gameWrap">
+        <div class="gameArea card" id="gameArea">
+          <div class="target" id="target" title="¡Atrápame!">💗</div>
+        </div>
+        <div class="card gameSide">
+          <h3 style="margin:0 0 8px;">Cómo jugar</h3>
+          <p class="subtitle" style="margin:0 0 10px;">
+            Toca el corazón dentro del cuadro. Cada vez se moverá.
+            Si llegas a <b>20</b>, aparece un mensaje secreto 😳❤️
+          </p>
+          <div class="bar">
+            <button class="pillBtn" id="btnStart">Empezar</button>
+            <button class="pillBtn secondary" id="btnReset">Reiniciar</button>
+          </div>
+          <p class="hint" id="gameMsg" style="margin-top:10px;"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-bottom:24px;">
+      <h2 class="sectionTitle">Última cosa…</h2>
+      <div class="card">
+        <p class="subtitle" style="margin:0 0 12px;">
+          Presiona el botón para revelar una frase final. (Prometo que vale la pena)
+        </p>
+        <button class="btn" id="btnFinal">🌹 Revelar</button>
+        <p class="quote" id="finalText" style="margin-top:12px;"></p>
+      </div>
+    </section>
+
+    <footer>
+      Hecho por <b id="yourName">Dariel</b> con amor • <span id="year"></span> ❤️
+    </footer>
+  </main>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="modalHeader">
+        <h2>💌 Carta para ti, <span id="modalHerName">mi amor</span></h2>
+        <button class="close" id="btnClose">Cerrar</button>
+      </div>
+      <p class="letter" id="letterText"></p>
+      <div class="bar" style="margin-top:14px;">
+        <button class="pillBtn secondary" id="btnMiniLluvia">Lluvia de corazones 💞</button>
+        <button class="pillBtn secondary" id="btnCopiarCarta">Copiar carta</button>
+      </div>
+      <p class="hint" id="letterMsg" style="margin-top:10px;"></p>
+    </div>
+  </div>
+
+  <script>
+    // ====== PERSONALIZA AQUÍ ======
+    const NOMBRE_DE_ELLA = "Ary";
+    const TU_NOMBRE = "Dariel";
+
+    const CARTA = `Mi amor:
+
+Hoy es 14 de febrero.
+Solo quería recordarte algo: contigo, lo simple se vuelve especial.
+
+Gracias por existir, por tus detalles, por tu risa y por la paz que me das.
+Me gustas en todos tus modos: feliz, seria, cansada, de chicha jaja...
+y me encanta la forma en la que haces que el mundo se sienta más bonito.
+
+Si algún día dudas, vuelve a esta página:
+aquí siempre vas a tener un “te amo” esperándote.
+
+Con todo mi corazón,
+${TU_NOMBRE} ❤️`;
+
+    const RAZONES = [
+      "Porque tu sonrisa me arregla el día sin pedir permiso.",
+      "Porque contigo hasta el silencio se siente cómodo.",
+      "Porque me inspiras a ser mejor (sin presionarme).",
+      "Porque eres mi persona favorita para contarle todo.",
+      "Porque cuando te abrazo, todo se calma.",
+      "Porque me encantan tus manías y tus ocurrencias.",
+      "Porque tu forma de querer es bonita y real.",
+      "Porque haces que los días normales se sientan especiales.",
+      "Porque contigo la vida se siente más ligera.",
+      "Porque te elegiría en todas mis versiones."
+    ];
+    // =============================
+
+    const $ = (id) => document.getElementById(id);
+
+    $("herName").textContent = NOMBRE_DE_ELLA;
+    $("modalHerName").textContent = NOMBRE_DE_ELLA;
+    $("yourName").textContent = TU_NOMBRE;
+    $("letterText").textContent = CARTA;
+    $("year").textContent = new Date().getFullYear();
+
+    function calcDaysToFeb14(){
+      const now = new Date();
+      const year = now.getFullYear();
+      const target = new Date(year, 1, 14, 0, 0, 0);
+      const todayMidnight = new Date(year, now.getMonth(), now.getDate(), 0,0,0);
+      const ms = target - todayMidnight;
+      const days = Math.max(0, Math.ceil(ms / (1000*60*60*24)));
+      $("daysTo").textContent = String(days);
+    }
+    calcDaysToFeb14();
+
+    // Razones random
+    let lastIdx = -1;
+    function newReason(){
+      let idx = Math.floor(Math.random() * RAZONES.length);
+      if(RAZONES.length > 1){
+        while(idx === lastIdx) idx = Math.floor(Math.random() * RAZONES.length);
+      }
+      lastIdx = idx;
+      $("reasonText").textContent = "“" + RAZONES[idx] + "”";
+    }
+    newReason();
+
+    $("btnOtra").addEventListener("click", newReason);
+
+    $("btnCopiar").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText($("reasonText").textContent.replaceAll("“","").replaceAll("”",""));
+        $("copyMsg").textContent = "Copiado ✅";
+        setTimeout(()=> $("copyMsg").textContent = "", 1800);
+      }catch{
+        $("copyMsg").textContent = "No pude copiar.";
+      }
+    });
+
+    // Modal carta
+    const overlay = $("overlay");
+    $("btnCarta").addEventListener("click", () => overlay.classList.add("open"));
+    $("btnClose").addEventListener("click", () => overlay.classList.remove("open"));
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) overlay.classList.remove("open");
+    });
+
+    $("btnCopiarCarta").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(CARTA);
+        $("letterMsg").textContent = "Carta copiada ✅";
+        setTimeout(()=> $("letterMsg").textContent = "", 1800);
+      }catch{
+        $("letterMsg").textContent = "No pude copiar.";
+      }
+    });
+
+    // Corazones flotando
+    const floatLayer = $("floatLayer");
+    function spawnFloatingHeart(){
+      const el = document.createElement("div");
+      el.className = "heart";
+      const hearts = ["💗","💖","💘","💞","💓","❤️"];
+      el.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      const left = Math.random()*100;
+      const size = 14 + Math.random()*18;
+      const dur = 6 + Math.random()*6;
+      const drift = (Math.random() * 160 - 80).toFixed(0) + "px";
+      el.style.left = left + "vw";
+      el.style.fontSize = size + "px";
+      el.style.animationDuration = dur + "s";
+      el.style.setProperty("--drift", drift);
+      floatLayer.appendChild(el);
+      setTimeout(()=> el.remove(), dur*1000 + 200);
+    }
+    setInterval(() => { if(Math.random() < 0.55) spawnFloatingHeart(); }, 450);
+
+    $("btnMiniLluvia").addEventListener("click", () => {
+      for(let i=0;i<30;i++){
+        setTimeout(spawnFloatingHeart, i*55);
+      }
+      $("letterMsg").textContent = "💞";
+      setTimeout(()=> $("letterMsg").textContent = "", 900);
+    });
+
+    // Música
+    const audio = $("audio");
+    let musicOn = false;
+
+    async function tryPlay(){
+      try{
+        await audio.play();
+        musicOn = true;
+        $("btnMusica").textContent = "🎵 Música: ON";
+        $("audioStatus").textContent = "🎶 Música activa.";
+      }catch{
+        $("btnMusica").textContent = "🎵 Presiona para música";
+        $("audioStatus").textContent = "El navegador bloqueó autoplay. Dale Play manualmente.";
+      }
+    }
+
+    window.addEventListener("load", () => {
+      tryPlay();
+    });
+
+    $("btnMusica").addEventListener("click", async () => {
+      try{
+        if(!musicOn){
+          await audio.play();
+          musicOn = true;
+          $("btnMusica").textContent = "🎵 Música: ON";
+          $("audioStatus").textContent = "🎶 Música activa.";
+        }else{
+          audio.pause();
+          musicOn = false;
+          $("btnMusica").textContent = "🎵 Música: OFF";
+          $("audioStatus").textContent = "Música pausada.";
+        }
+      }catch{
+        $("audioStatus").textContent = "No se pudo reproducir. Revisa que song.mp3 esté en la carpeta.";
+      }
+    });
+
+    // Juego
+    const gameArea = $("gameArea");
+    const target = $("target");
+    let score = 0;
+    let gameOn = false;
+
+    function moveTarget(){
+      const rect = gameArea.getBoundingClientRect();
+      const pad = 26;
+      const x = pad + Math.random() * (rect.width - pad*2);
+      const y = pad + Math.random() * (rect.height - pad*2);
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+    }
+
+    function setGameMsg(text){
+      $("gameMsg").textContent = text;
+    }
+
+    $("btnStart").addEventListener("click", () => {
+      gameOn = true;
+      setGameMsg("¡Vamos! Atrapa el corazón 💗");
+      moveTarget();
+    });
+
+    $("btnReset").addEventListener("click", () => {
+      score = 0;
+      $("heartCount").textContent = score;
+      setGameMsg("Reiniciado. Presiona “Empezar”.");
+      moveTarget();
+    });
+
+    target.addEventListener("click", () => {
+      if(!gameOn){
+        setGameMsg("Presiona “Empezar” primero 😊");
+        return;
+      }
+
+      score++;
+      $("heartCount").textContent = score;
+      target.textContent = (score % 3 === 0) ? "💖" : "💗";
+      moveTarget();
+
+      if(score === 10){
+        setGameMsg("10 💞 Ya estás desbloqueando algo bonito…");
+      }
+      if(score === 20){
+        setGameMsg("20 ❤️ Mensaje secreto: “Te elijo hoy, mañana y siempre.”");
+      }
+    });
+
+    requestAnimationFrame(() => {
+      const rect = gameArea.getBoundingClientRect();
+      target.style.left = (rect.width/2) + "px";
+      target.style.top = (rect.height/2) + "px";
+    });
+
+    // Final
+    $("btnFinal").addEventListener("click", () => {
+      const msg = `Si esta página fuera un lugar, sería mi forma de decirte:
+“Gracias por ser tú. Te amo, ${NOMBRE_DE_ELLA}.” 🌹`;
+      $("finalText").textContent = msg;
+      for(let i=0;i<25;i++) setTimeout(spawnFloatingHeart, i*55);
+    });
+  </script>
+</body>
+</html>
